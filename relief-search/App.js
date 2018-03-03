@@ -1,7 +1,8 @@
 import React from 'react';
-import { AppRegistry, Text, TextInput, View, Button } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import { AppRegistry, Text, TextInput, View, Button, CameraRoll, StyleSheet, Image } from 'react-native';
 
+import { StackNavigator } from 'react-navigation';
+import { ImagePicker } from 'expo';
 
 
 class HomeScreen extends React.Component {
@@ -32,22 +33,68 @@ class HomeScreen extends React.Component {
         onPress={() => this.props.navigation.navigate('PictureUpload')}
         title="Next"
         color="#79CDCD"
-        accessibilityLabel="Learn more about this purple button"
+        accessibilityLabel="Enter data, move to next screen"
         />
       </View>
     );
   }
 }
 
+
 class PictureUpload extends React.Component {
+
+  state = {
+      image: null,
+    };
+
+    render() {
+        let { image } = this.state;
+
+        return (
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Button
+              title="Upload an image from Camera Roll"
+              onPress={this._pickImage}
+            />
+            {image &&
+              <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+
+              <Button
+                onPress= {() => this.props.navigation.navigate('ConfirmationPage') }
+                title="Next"
+                color="#79CDCD"
+                accessibilityLabel="Enter data, move to next screen"
+              />
+
+          </View>
+        );
+      }
+      _pickImage = async () => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    allowsEditing: true,
+    aspect: [4, 3],
+  });
+
+  console.log(result);
+
+  if (!result.cancelled) {
+    this.setState({ image: result.uri });
+
+  }
+};
+
+}
+
+class ConfirmationPage extends React.Component {
+
   render() {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Details Screen</Text>
-      </View>
-    )
+    return(
+      <View><Text>Thank you for your submission. You will hear from us in the near future when we confirm a match.</Text></View>
+    );
   }
 }
+
+
 
 export default StackNavigator({
   Home: {
@@ -55,5 +102,8 @@ export default StackNavigator({
   },
   PictureUpload: {
     screen: PictureUpload,
+  },
+  ConfirmationPage: {
+    screen: ConfirmationPage,
   }
 });
