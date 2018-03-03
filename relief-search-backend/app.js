@@ -11,6 +11,7 @@ app.set('view engine', 'html');
 
 app.use('/api', apiRouter);
 app.use(express.static(__dirname + '/public'));
+app.use('/Images',express.static(__dirname + '/Images'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -33,7 +34,7 @@ app.use(function(err, req, res, next) {
 module.exports = app;
 
 /*
-Endpoint: https://westcentralus.api.cognitive.microsoft.com/face/v1.0
+Endpoint: https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect
 
 Key 1: 6db02891df294caa88b462af42da79be
 
