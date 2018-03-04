@@ -5,6 +5,7 @@ var fs = require('fs');
 var request = require('request');
 const router = express.Router();
 var name = '';
+var uri = '';
 var storage = multer.diskStorage({
      destination: function(req, file, callback) {
          callback(null, "./Images");
@@ -28,12 +29,14 @@ var upload = multer({
          'Content-Type': 'application/json'
      },
      body: JSON.stringify({
-      	url: "http://35.185.245.7/Images/" + name
+      	url: uri
       })
  };
 
 
 function processImage(){
+  uri = "http://localhost:3000/Images/" + name;
+  console.log(uri);
   request(options, function(err, res, body) {
     if (err){
       console.log(err);
