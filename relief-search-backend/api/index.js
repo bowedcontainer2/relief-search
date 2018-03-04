@@ -35,7 +35,7 @@ var upload = multer({
 
 
 function processImage(){
-  uri = "http://localhost:3000/Images/" + name;
+  uri = "http://35.185.245.7/Images/" + name;
   console.log(uri);
   request(options, function(err, res, body) {
     if (err){
