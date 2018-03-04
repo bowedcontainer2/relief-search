@@ -24,6 +24,7 @@ var upload = multer({
 
 function processImage(){
   obj["url"] = "http://35.185.245.7/Images/" + name;
+  console.log(obj["url"])
   var options = {
       url: 'https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true',
       method: 'POST',
@@ -38,8 +39,11 @@ function processImage(){
       console.log(err);
     }
     else{
-      let json = JSON.parse(body);
-      console.log(json);
+      var json = JSON.parse(body);
+      //console.log(json[0]);
+      var face = json[0];
+      var data = JSON.stringify(face);
+      fs.writeFileSync('data.json',data);
     }
   });
 };
