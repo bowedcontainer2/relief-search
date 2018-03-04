@@ -27,7 +27,7 @@ var upload = multer({
          'Content-Type': 'application/json'
      },
      body: JSON.stringify({
-      	url: "http://localhost:3000/Images/image.png"
+      	url: "http://35.185.245.7/Images/image.png"
       })
  };
 
@@ -45,7 +45,6 @@ function processImage(){
 };
 
 router.post('/Upload', function(req, res) {
-      console.log('hi');
       upload(req, res, function(err) {
           if (err) {
               return res.end("Something went wrong!");
