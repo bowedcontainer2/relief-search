@@ -70,8 +70,10 @@ router.post('/Upload', function(req, res) {
           if (err) {
               return res.end("Something went wrong!");
           }
-          processImage();
-          return res.end("File uploaded sucessfully!.");
+          else{
+              processImage();
+              return res.end("File uploaded sucessfully!.");
+          }
       });
 
   });
