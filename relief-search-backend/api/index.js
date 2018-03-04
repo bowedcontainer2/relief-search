@@ -25,15 +25,15 @@ var upload = multer({
  }).single('image');
 
 function processFile(face){
-  fs.readFile('data.json', (err, res) => {
+  fs.readFile('data.json', 'utf8', function readFileCallback(err, res){
     if (err){
         console.log(err);
-    }
-    data = JSON.parse(res);
-    data.faces.push(face);
-    json = JSON.stringify(data)
-    fs.writeFile('data.json',json, callback);
-  });
+    } else {
+    data = JSON.parse(res); //now it an object
+    data.faces.push(face); //add some data
+    json = JSON.stringify(data); //convert it back to json
+    fs.writeFile('data.json', json, 'utf8', callback); // write it back
+  }});
 }
 
 function processImage(){
