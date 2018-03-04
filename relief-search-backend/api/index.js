@@ -32,7 +32,11 @@ function processFile(face){
     data = JSON.parse(res); //now it an object
     data.faces.push(face); //add some data
     json = JSON.stringify(data); //convert it back to json
-    fs.writeFile('data.json', json, 'utf8', callback); // write it back
+    fs.writeFile('data.json', json, 'utf8', function writeFileCallback(err,res){
+      if (err){
+          console.log(err);
+      }
+    }); // write it back
   }});
 }
 
