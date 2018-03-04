@@ -1,31 +1,37 @@
 import React from 'react';
-import { AppRegistry, Text, TextInput, View, Button, CameraRoll, StyleSheet, Image } from 'react-native';
+import { AppRegistry, Text, TextInput, View, Button, CameraRoll, StyleSheet, Image, ImageBackground } from 'react-native';
 
 import { StackNavigator } from 'react-navigation';
 import { ImagePicker } from 'expo';
 
+const remote = 'https://www.globalgiving.org/pfil/23609/pict_original.jpg';
+const local = './mexico1.jpg';
 
-class HomeScreen extends React.Component {
-  constructor(props) {
-  super(props);
-  this.state = {text: ''};
-}
+  class HomeScreen extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {text: ''};
+    }
+
 
   render() {
     return (
-      <View style={{padding: 10}}>
 
-      <Text style={{fontSize: 50}}>Welcome to Relief Search.</Text>
+      <ImageBackground source={require('./images/coolPaper.jpg')} style={ styles.backgroundImage }>
+      <View >
 
-      <Text style={{padding: 5}}> Name of Missing Person.</Text>
+
+      <Text style={ styles.introText }>Welcome to Relief Search.</Text>
+
+      <Text style={{padding: 5, color: '#ffffff'}}> Name of Missing Person.</Text>
         <TextInput
-          style={{height: 30}}
+          style={{height: 30, backgroundColor: "#ffffff"}}
           placeholder="Full Name"
           onChangeText={(text) => this.setState({text})}
         />
-        <Text style={{padding: 5}}>Best Phone Number.</Text>
+        <Text style={{padding: 5, color: '#ffffff'}}>Best Phone Number.</Text>
         <TextInput
-          style={{height: 30}}
+          style={{height: 30, backgroundColor: "#ffffff"}}
           placeholder="Phone Number"
           onChangeText={(text) => this.setState({text})}
         />
@@ -36,6 +42,8 @@ class HomeScreen extends React.Component {
         accessibilityLabel="Enter data, move to next screen"
         />
       </View>
+      </ImageBackground>
+
     );
   }
 }
@@ -51,7 +59,9 @@ class PictureUpload extends React.Component {
         let { image } = this.state;
 
         return (
+          <ImageBackground source={require('./images/coolPaper.jpg')} style={ styles.backgroundImage }>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{fontFamily:'Helvetica', fontSize:30, textAlign:'center', color: '#ffffff'}}>Please upload a clear photo of the missing person.</Text>
             <Button
               title="Upload an image from Camera Roll"
               onPress={this._pickImage}
@@ -67,6 +77,7 @@ class PictureUpload extends React.Component {
               />
 
           </View>
+          </ImageBackground>
         );
       }
       _pickImage = async () => {
@@ -79,23 +90,40 @@ class PictureUpload extends React.Component {
 
   if (!result.cancelled) {
     this.setState({ image: result.uri });
-
   }
-};
+  var photo = {
+    uri: result.uri,
+    type: 'image/jpeg',
+    name: 'photo.jpg',
+  };
 
+  var toSend = new FormData();
+  toSend.append( 'url', ' photo.uri' );
+
+  var request = {
+  method: 'POST',
+  headers: {
+  //  'Ocp-Apim-Subscription-Key': '6db02891df294caa88b462af42da79be',
+  },
+  body: toSend
+};
+fetch('http://35.185.245.7:80/api/Upload', request );
+
+};
 }
 
 class ConfirmationPage extends React.Component {
 
   render() {
     return(
-      <View><Text>Thank you for your submission. You will hear from us in the near future when we confirm a match.</Text></View>
+      <View style={{ flex: 1}}>
+      <ImageBackground source={require('./images/coolPaper.jpg')} style={ styles.backgroundImage }>
+      <Text style={ styles.titleText }>Thank you for your submission. You will hear from us in the near future via text message when we confirm a match.</Text>
+      </ImageBackground>
+      </View>
     );
   }
 }
-
-
-
 export default StackNavigator({
   Home: {
     screen: HomeScreen,
@@ -105,5 +133,31 @@ export default StackNavigator({
   },
   ConfirmationPage: {
     screen: ConfirmationPage,
+  }
+});
+
+const styles = StyleSheet.create({
+  baseText: {
+    fontFamily: 'Cochin',
+  },
+  titleText: {
+    marginTop: 10,
+    textAlign: 'center',
+    fontSize: 30,
+    fontFamily: 'Helvetica',
+    color: '#ffffff'
+
+  },
+  introText: {
+    marginTop: 100,
+    fontFamily: 'Helvetica',
+    color: '#ffffff',
+    fontSize: 60,
+    textAlign: 'center',
+  },
+  backgroundImage: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
