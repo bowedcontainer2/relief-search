@@ -98,7 +98,8 @@ class PictureUpload extends React.Component {
   };
 
   var toSend = new FormData();
-  toSend.append( 'url', ' photo.uri' );
+  toSend.append( 'url', 'photo.uri' );
+  toSend.append( 'image', 'photo');
 
   var request = {
   method: 'POST',
