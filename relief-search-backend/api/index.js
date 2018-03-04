@@ -45,7 +45,7 @@ function processImage(){
 };
 
 router.post('/Upload', function(req, res) {
-      //console.log(req);
+      console.log('hi');
       upload(req, res, function(err) {
           if (err) {
               return res.end("Something went wrong!");
