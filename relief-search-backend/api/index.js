@@ -4,13 +4,14 @@ var bodyParser = require('body-parser');
 var fs = require('fs');
 var request = require('request');
 const router = express.Router();
-
+var name = '';
 var storage = multer.diskStorage({
      destination: function(req, file, callback) {
          callback(null, "./Images");
      },
      filename: function(req, file, callback) {
-         callback(null, Date.now() + "_" + file.originalname);
+         name = Date.now() + "_" + file.originalname;
+         callback(null, name );
      }
  });
 
@@ -27,7 +28,7 @@ var upload = multer({
          'Content-Type': 'application/json'
      },
      body: JSON.stringify({
-      	url: "http://35.185.245.7/Images/image.png"
+      	url: "http://35.185.245.7/Images/" + name
       })
  };
 
@@ -41,7 +42,7 @@ function processImage(){
       let json = JSON.parse(body);
       console.log(json);
     }
-    });
+  });
 };
 
 router.post('/Upload', function(req, res) {
