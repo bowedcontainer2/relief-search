@@ -1,18 +1,17 @@
 import React from 'react';
 import { AppRegistry, Text, TextInput, View, Button, CameraRoll, StyleSheet, Image, ImageBackground } from 'react-native';
 
-import { StackNavigator } from 'react-navigation';
-import { ImagePicker } from 'expo';
+import { StackNavigator } from 'react-navigation'; // React-Native Navigator
+import { ImagePicker } from 'expo'; //for CameraRoll
 
-const remote = 'https://www.globalgiving.org/pfil/23609/pict_original.jpg';
-const local = './mexico1.jpg';
 
+//Initial Screen
   class HomeScreen extends React.Component {
+
     constructor(props) {
       super(props);
       this.state = {text: ''};
     }
-
 
   render() {
     return (
@@ -22,14 +21,15 @@ const local = './mexico1.jpg';
 
 
       <Text style={ styles.introText }>Welcome to Relief Search.</Text>
+      <Text style ={ styles.subHeading }>Please enter a name and phone number. </Text>
 
-      <Text style={{padding: 5, color: '#ffffff'}}> Name of Missing Person.</Text>
+      <Text style={{padding: 5, color: '#ffffff'}}> Name of Missing Person</Text>
         <TextInput
           style={{height: 30, backgroundColor: "#ffffff"}}
           placeholder="Full Name"
           onChangeText={(text) => this.setState({text})}
         />
-        <Text style={{padding: 5, color: '#ffffff'}}>Best Phone Number.</Text>
+        <Text style={{padding: 5, color: '#ffffff'}}>Phone Number</Text>
         <TextInput
           style={{height: 30, backgroundColor: "#ffffff"}}
           placeholder="Phone Number"
@@ -48,7 +48,7 @@ const local = './mexico1.jpg';
   }
 }
 
-
+//Picture Uploading Screen
 class PictureUpload extends React.Component {
 
   state = {
@@ -63,6 +63,7 @@ class PictureUpload extends React.Component {
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Text style={{fontFamily:'Helvetica', fontSize:30, textAlign:'center', color: '#ffffff'}}>Please upload a clear photo of the missing person.</Text>
             <Button
+            //choose from camera roll via __pickImage
               title="Upload an image from Camera Roll"
               onPress={this._pickImage}
             />
@@ -80,34 +81,39 @@ class PictureUpload extends React.Component {
           </ImageBackground>
         );
       }
+
+      //function for pulling up and choosing image from Camera Roll
       _pickImage = async () => {
   let result = await ImagePicker.launchImageLibraryAsync({
     allowsEditing: true,
     aspect: [4, 3],
   });
 
-  console.log(result);
+  console.log(result); //print image object to verify
 
   if (!result.cancelled) {
     this.setState({ image: result.uri });
   }
+
+  //API CAll STUFF
   var photo = {
     uri: result.uri,
     type: 'image/jpeg',
-    name: 'photo.jpg',
+    name: 'photoTest',
   };
 
   var toSend = new FormData();
-  toSend.append( 'url', 'photo.uri' );
-  toSend.append( 'image', 'photo');
+  toSend.append( 'name', 'file' );
+  toSend.append( 'photo', photo);
 
   var request = {
   method: 'POST',
-  headers: {
-  //  'Ocp-Apim-Subscription-Key': '6db02891df294caa88b462af42da79be',
-  },
+  headers: {},
   body: toSend
 };
+
+  console.log(toSend); //just printing to verify
+
 fetch('http://35.185.245.7:80/api/Upload', request );
 
 };
@@ -147,7 +153,10 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Helvetica',
     color: '#ffffff'
-
+  },
+  subHeading: {
+    color: '#ffffff',
+    fontSize: 20,
   },
   introText: {
     marginTop: 100,
