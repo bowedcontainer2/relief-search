@@ -7,6 +7,9 @@ const router = express.Router();
 var name = '';
 var uri = '';
 var obj = {};
+var data = {
+  faces: []
+};
 var storage = multer.diskStorage({
      destination: function(req, file, callback) {
          callback(null, "./Images");
@@ -21,6 +24,17 @@ var upload = multer({
      storage: storage
  }).single('image');
 
+function processFile(face){
+  fs.readFile('data.json', (err, res) => {
+    if (err){
+        console.log(err);
+    }
+    data = JSON.parse(res);
+    data.faces.push(face);
+    json = JSON.stringify(data)
+    fs.writeFile('data.json',json, callback);
+  });
+}
 
 function processImage(){
   obj["url"] = "http://35.185.245.7/Images/" + name;
@@ -42,8 +56,7 @@ function processImage(){
       var json = JSON.parse(body);
       //console.log(json[0]);
       var face = json[0];
-      var data = JSON.stringify(face);
-      fs.writeFileSync('data.json',data);
+      processFile(face);
     }
   });
 };
