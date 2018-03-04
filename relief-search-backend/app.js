@@ -12,6 +12,8 @@ app.set('view engine', 'html');
 app.use('/api', apiRouter);
 app.use(express.static(__dirname + '/public'));
 app.use('/Images',express.static(__dirname + '/Images'));
+app.use('/data',express.static(__dirname + '/'));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
