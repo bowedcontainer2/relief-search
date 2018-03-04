@@ -6,6 +6,7 @@ var request = require('request');
 const router = express.Router();
 var name = '';
 var uri = '';
+var obj = {};
 var storage = multer.diskStorage({
      destination: function(req, file, callback) {
          callback(null, "./Images");
@@ -28,14 +29,12 @@ var upload = multer({
          'Ocp-Apim-Subscription-Key': '6db02891df294caa88b462af42da79be',
          'Content-Type': 'application/json'
      },
-     body: JSON.stringify({
-      	url: uri
-      })
+     body: JSON.stringify(obj)
  };
 
 
 function processImage(){
-  uri = "http://35.185.245.7/Images/" + name;
+  obj["url"] = "http://35.185.245.7/Images/" + name;
   console.log(uri);
   request(options, function(err, res, body) {
     if (err){
